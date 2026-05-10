@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>DHL Label Creator — Einstellungen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --dhl-yellow: #FFCC00;
+            --dhl-red: #D40511;
+            --dhl-dark: #323232;
+            --dhl-gray: #767676;
+            --dhl-light-gray: #EDEDED;
+            --dhl-bg: #F7F7F7;
+            --dhl-white: #FFFFFF;
+            --dhl-border: #CCCCCC;
+            --dhl-input-border: #999999;
+            --dhl-success: #00884A;
+            --dhl-error: #D40511;
+        }
+        body { font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif; background: var(--dhl-bg); color: var(--dhl-dark); font-size: 15px; line-height: 1.5; }
+        .topbar { background: var(--dhl-yellow); height: 8px; }
+
+        .header { background: var(--dhl-white); border-bottom: 1px solid var(--dhl-border); padding: 16px 0; }
+        .header-inner { max-width: 900px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 16px; }
+        .dhl-logo { background: var(--dhl-yellow); color: var(--dhl-red); font-weight: 900; font-size: 20px; padding: 6px 14px; border-radius: 4px; letter-spacing: 2px; }
+        .header h1 { font-size: 18px; font-weight: 600; color: var(--dhl-dark); }
+
+        .main { max-width: 900px; margin: 24px auto; padding: 0 24px 48px; }
+
+        .section { background: var(--dhl-white); border: 1px solid var(--dhl-border); border-radius: 4px; margin-bottom: 24px; overflow: hidden; }
+        .section-header { background: var(--dhl-light-gray); padding: 12px 20px; font-size: 14px; font-weight: 700; color: var(--dhl-dark); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--dhl-border); }
+        .section-body { padding: 20px; }
+
+        .form-row { display: flex; gap: 16px; margin-bottom: 14px; }
+        .form-row:last-child { margin-bottom: 0; }
+        .form-group { flex: 1; min-width: 0; }
+        .form-group.small { flex: 0 0 130px; }
+        .form-group.medium { flex: 0 0 220px; }
+        .form-label { display: block; font-size: 11px; font-weight: 600; color: var(--dhl-gray); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
+        .form-label .req { color: var(--dhl-red); }
+
+        input[type="text"], input[type="password"], select { width: 100%; padding: 10px 12px; border: 1px solid var(--dhl-input-border); border-radius: 3px; font-family: inherit; font-size: 14px; color: var(--dhl-dark); background: var(--dhl-white); outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+        input:focus, select:focus { border-color: var(--dhl-yellow); box-shadow: 0 0 0 2px rgba(255,204,0,0.3); }
+        input::placeholder { color: #AAA; }
+
+        .toggle-row { display: flex; align-items: center; gap: 12px; }
+        .toggle-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--dhl-red); cursor: pointer; }
+        .toggle-row label { font-size: 14px; font-weight: 500; cursor: pointer; }
+        .toggle-row .hint { font-size: 12px; color: var(--dhl-gray); margin-left: 6px; }
+
+        .shipper-card { border: 1px solid var(--dhl-border); border-radius: 4px; padding: 16px; margin-bottom: 14px; background: #FAFAFA; position: relative; }
+        .shipper-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .shipper-card-head .num { font-size: 12px; font-weight: 700; color: var(--dhl-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-remove { padding: 4px 10px; font-size: 12px; font-weight: 600; font-family: inherit; border: 1px solid var(--dhl-input-border); border-radius: 3px; background: white; color: var(--dhl-error); cursor: pointer; }
+        .btn-remove:hover { background: #FFEBEE; border-color: var(--dhl-error); }
+
+        .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600; font-family: inherit; border: 1px dashed var(--dhl-input-border); border-radius: 3px; background: var(--dhl-white); color: var(--dhl-dark); cursor: pointer; }
+        .btn-add:hover { border-color: var(--dhl-dark); background: var(--dhl-light-gray); }
+
+        .actions { display: flex; gap: 12px; align-items: center; }
+        .btn-save { padding: 12px 28px; font-size: 14px; font-weight: 700; font-family: inherit; border: none; border-radius: 4px; cursor: pointer; background: var(--dhl-red); color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-save:hover { background: #B8040E; }
+        .btn-secondary { padding: 12px 20px; font-size: 14px; font-weight: 600; font-family: inherit; border: 1px solid var(--dhl-input-border); border-radius: 4px; background: white; color: var(--dhl-dark); cursor: pointer; }
+        .btn-secondary:hover { background: var(--dhl-light-gray); }
+
+        .save-status { font-size: 13px; font-weight: 600; }
+        .save-status.success { color: var(--dhl-success); }
+        .save-status.error { color: var(--dhl-error); }
+
+        .help { background: #FFFEF5; border: 1px solid var(--dhl-yellow); border-radius: 4px; padding: 12px 16px; margin-bottom: 24px; font-size: 13px; color: var(--dhl-dark); }
+        .help b { color: var(--dhl-red); }
+        .help a { color: var(--dhl-dark); }
+    </style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="header">
+    <div class="header-inner">
+        <div class="dhl-logo">DHL</div>
+        <h1>Einstellungen</h1>
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="help">
+        <b>Hinweis:</b> Du brauchst einen DHL Geschäftskunden-Vertrag und Zugang zum
+        <a href="https://developer.dhl.com" target="_blank" rel="noopener">DHL Developer Portal</a>.
+        Für Tests kannst du den Sandbox-Modus aktivieren — es werden dann keine echten Labels erstellt.
+    </div>
+
+    <!-- API Credentials -->
+    <div class="section">
+        <div class="section-header">DHL API-Zugang</div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <span class="form-label">API-Key <span class="req">*</span></span>
+                    <input type="text" id="api_key" placeholder="aus dem DHL Developer Portal">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <span class="form-label">Benutzername (GKP) <span class="req">*</span></span>
+                    <input type="text" id="username" placeholder="dein-gkp-benutzer">
+                </div>
+                <div class="form-group">
+                    <span class="form-label">Passwort (GKP) <span class="req">*</span></span>
+                    <input type="password" id="password">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="toggle-row">
+                        <input type="checkbox" id="sandbox">
+                        <label for="sandbox">Sandbox-Modus (Testumgebung — keine echten Labels)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drucker -->
+    <div class="section">
+        <div class="section-header">Drucker</div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <span class="form-label">Label-Format (DHL <code>printFormat</code>)</span>
+                    <select id="print_format">
+                        <option value="910-300-400">100×150 mm — empfohlen für POLONO PL60 / Thermo-Drucker</option>
+                        <option value="910-300-410">100×150 mm — Variante 410</option>
+                        <option value="910-300-300">A6 — 105×148 mm (kleines Label, ohne Routing-Code)</option>
+                        <option value="910-300-300-oZ">A6 — 105×148 mm ohne Zusatz</option>
+                        <option value="910-300-700">A5 — 103×199 mm (Label + Beleg)</option>
+                        <option value="910-300-700-oZ">A5 — 103×199 mm ohne Zusatz</option>
+                        <option value="910-300-600">103×150 mm</option>
+                        <option value="100x70mm">100×70 mm (Warenpost)</option>
+                        <option value="A4">A4 — Label oben links auf A4-Blatt (Tintenstrahl-/Laserdrucker)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="help" style="margin-top:0;margin-bottom:14px;background:#FFFEF5;">
+                <b>Wichtig:</b> Das Label-Format muss <i>exakt</i> zur Etikettengröße deines Druckers passen, sonst druckt
+                Chrome den Bogen über mehrere Blätter oder skaliert klein in eine Ecke.
+                Für deinen <b>POLONO PL60</b> (100×150 mm Etiketten) ist <code>910-300-400</code> richtig.
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="toggle-row">
+                        <input type="checkbox" id="auto_print">
+                        <label for="auto_print">Label nach erfolgreicher Sendung automatisch drucken</label>
+                    </div>
+                </div>
+            </div>
+            <div class="help" style="margin-top:14px;margin-bottom:0;">
+                <b>Tipp für stillen Druck:</b> Standardmäßig zeigt Chrome einen Druckdialog. Damit das Label
+                <i>ohne Bestätigung</i> direkt auf den Standarddrucker geht, starte Chrome mit dem Flag
+                <code>--kiosk-printing</code> (Verknüpfung anpassen). Andernfalls musst du im Druckdialog nur
+                noch <b>Enter</b> drücken.<br><br>
+                <b>Wichtig:</b> Im Druckdialog bei „Weitere Einstellungen“ → <i>Ränder: Keine</i> und
+                <i>Skalierung: 100 %</i> einstellen, sonst druckt Chrome das Label kleiner als das Etikett.
+            </div>
+        </div>
+    </div>
+
+    <!-- Billing Numbers -->
+    <div class="section">
+        <div class="section-header">Abrechnungsnummern</div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <span class="form-label">DHL Paket (V01PAK) — 14-stellig</span>
+                    <input type="text" id="billing_paket" placeholder="z.B. 1234567890120101" maxlength="14">
+                </div>
+                <div class="form-group">
+                    <span class="form-label">DHL Kleinpaket (V62KP) — 14-stellig</span>
+                    <input type="text" id="billing_paeckchen" placeholder="z.B. 1234567890126201" maxlength="14">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <span class="form-label">DHL Retoure — 14-stellig (optional)</span>
+                    <input type="text" id="billing_returns" placeholder="leer = wie Paket" maxlength="14">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DHL Retoure -->
+    <div class="section">
+        <div class="section-header">DHL Retoure</div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <span class="form-label">Empfänger-ID (DHL GKP)</span>
+                    <input type="text" id="returns_receiver_id" placeholder="z.B. wonderware.de">
+                </div>
+            </div>
+            <div class="help" style="margin-top:14px;margin-bottom:0;background:#FFFEF5;">
+                <b>Hinweis:</b> Die Empfänger-ID legst du im DHL Geschäftskundenportal unter
+                <i>„Retoure Online → Empfänger verwalten"</i> an. Die zugehörige Retouren-Adresse
+                (Tommy Hai Nam Nguyen, …) ist dort gespeichert und wird automatisch
+                auf das Retourenlabel gedruckt — du gibst hier nur die Kennung an.
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales-Backend Hinweis -->
+    <div class="section">
+        <div class="section-header">Sales / Discord</div>
+        <div class="section-body">
+            <div class="help" style="margin-top:0;margin-bottom:0;background:#FFFEF5;">
+                <b>Sales-Aggregation:</b> Wenn das Flask-Backend
+                (<code>http://localhost:5000</code>) läuft, teilen sich Web-App und Extension
+                denselben State (<code>sales_state.json</code>) und dieselbe Discord-Nachricht.
+                Andernfalls fällt die Extension automatisch auf lokalen State
+                (<code>chrome.storage</code>) und direkten Discord-Post zurück — kein Setup nötig.
+            </div>
+        </div>
+    </div>
+
+    <!-- Rechnungs-Empfänger -->
+    <div class="section">
+        <div class="section-header">Rechnungs-Empfänger</div>
+        <div class="section-body">
+            <div class="help" style="margin-top:0;margin-bottom:14px;background:#FFFEF5;">
+                Pro Empfänger eine eigene Live-Sales-Übersicht in einem eigenen Discord-Channel.
+                Beim Label-Erstellen wählst du, wem dieser Sale zugeordnet wird.
+            </div>
+            <div id="recipients-list"></div>
+            <button class="btn-add" id="btn-add-recipient">+ Empfänger hinzufügen</button>
+        </div>
+    </div>
+
+    <!-- Shippers -->
+    <div class="section">
+        <div class="section-header">Absender-Adressbuch</div>
+        <div class="section-body">
+            <div id="shippers-list"></div>
+            <button class="btn-add" id="btn-add-shipper">+ Absender hinzufügen</button>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn-save" id="btn-save">Speichern</button>
+        <button class="btn-secondary" id="btn-reset">Zurücksetzen</button>
+        <span class="save-status" id="save-status"></span>
+    </div>
+
+</div>
+
+<template id="shipper-template">
+    <div class="shipper-card">
+        <div class="shipper-card-head">
+            <span class="num"></span>
+            <button class="btn-remove" data-act="remove">Entfernen</button>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <span class="form-label">Bezeichnung (kurz) <span class="req">*</span></span>
+                <input type="text" data-field="label" placeholder="z.B. Hauptlager">
+            </div>
+            <div class="form-group">
+                <span class="form-label">Name 1 <span class="req">*</span></span>
+                <input type="text" data-field="name">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <span class="form-label">Strasse <span class="req">*</span></span>
+                <input type="text" data-field="street">
+            </div>
+            <div class="form-group small">
+                <span class="form-label">Nr. <span class="req">*</span></span>
+                <input type="text" data-field="street_number">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group small">
+                <span class="form-label">PLZ <span class="req">*</span></span>
+                <input type="text" data-field="postal_code" maxlength="5">
+            </div>
+            <div class="form-group">
+                <span class="form-label">Ort <span class="req">*</span></span>
+                <input type="text" data-field="city">
+            </div>
+            <div class="form-group small">
+                <span class="form-label">Land</span>
+                <input type="text" data-field="country" value="DEU" maxlength="3">
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="recipient-template">
+    <div class="shipper-card">
+        <div class="shipper-card-head">
+            <span class="num"></span>
+            <button class="btn-remove" data-act="remove">Entfernen</button>
+        </div>
+        <input type="hidden" data-field="id">
+        <div class="form-row">
+            <div class="form-group">
+                <span class="form-label">Name <span class="req">*</span></span>
+                <input type="text" data-field="name" placeholder="z.B. Christian">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <span class="form-label">Discord Webhook-URL</span>
+                <input type="text" data-field="webhook_url" placeholder="https://discord.com/api/webhooks/...">
+            </div>
+        </div>
+    </div>
+</template>
+
+<script src="options.js"></script>
+</body>
+</html>
