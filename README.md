@@ -10,11 +10,13 @@ Chrome-/Edge-Browser-Erweiterung zum Erstellen von DHL-Versand- und Retouren-Lab
 2. **`Download ZIP`** wählen
 3. ZIP irgendwo entpacken (z. B. `C:\Tools\dhl-extension-team\`) — **NICHT** im Downloads-Ordner lassen, sonst funktioniert die Extension später nicht mehr.
 
-## 📖 Setup-Anleitung
+## 📖 Anleitungen
 
-Eine ausführliche, deutsche Schritt-für-Schritt-Anleitung als PDF findest du hier im Repo:
+Zwei PDFs liegen im Repo — wähle was du brauchst:
 
-➡️ **[`DHL-Label-Extension-Setup-Anleitung.pdf`](./DHL-Label-Extension-Setup-Anleitung.pdf)**
+⚡ **[`DHL-Label-Extension-Quickstart.pdf`](./DHL-Label-Extension-Quickstart.pdf)** — 1-Seiter, 5 Schritte, in ~15 min startklar
+
+📚 **[`DHL-Label-Extension-Setup-Anleitung.pdf`](./DHL-Label-Extension-Setup-Anleitung.pdf)** — ausführliche Anleitung mit allen Details (DHL Developer Portal Setup, Discord-Webhook erstellen, häufige Probleme & Lösungen, Datenschutz)
 
 Darin enthalten:
 - Installation in Chrome/Edge (Entwicklermodus, Entpackte Erweiterung laden)
