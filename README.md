@@ -1,71 +1,62 @@
-# DHL Label Creator — Chrome Extension
+# DHL Label Creator (Team)
 
-DHL Versandlabels für eBay-Sendungen direkt im Browser erstellen — ohne lokalen Server.
+Chrome-/Edge-Browser-Erweiterung zum Erstellen von DHL-Versand- und Retouren-Labels — mit deinem eigenen DHL-Geschäftskunden-Account, ohne lokales Backend.
 
-Identisches Layout wie das Flask-Tool (Sektionen, gelbe Top-Bar, rote Schaltflächen),
-aber als Manifest-V3-Extension. API-Calls laufen im Service-Worker (kein CORS-Stress),
-der Verlauf wird in `chrome.storage.local` gespeichert.
+## 📥 Download für Kollegen
 
-## Installation
+**Aktuelle Version herunterladen:**
 
-1. Chrome öffnen → `chrome://extensions/`
-2. Oben rechts **Entwicklermodus** aktivieren
-3. **Entpackte Erweiterung laden** klicken
-4. Diesen Ordner (`extension/`) auswählen
-5. Beim ersten Start öffnet sich automatisch die Einstellungs-Seite
+1. Oben rechts auf den grünen **`<> Code`**-Button klicken
+2. **`Download ZIP`** wählen
+3. ZIP irgendwo entpacken (z. B. `C:\Tools\dhl-extension-team\`) — **NICHT** im Downloads-Ordner lassen, sonst funktioniert die Extension später nicht mehr.
 
-## Konfiguration (Optionen-Seite)
+## 📖 Setup-Anleitung
 
-Erforderlich:
+Eine ausführliche, deutsche Schritt-für-Schritt-Anleitung als PDF findest du hier im Repo:
 
-- **API-Key** — aus dem [DHL Developer Portal](https://developer.dhl.com)
-- **Benutzername / Passwort** — aus dem DHL Geschäftskundenportal (GKP)
-- **Abrechnungsnummern** — 14-stellig, je eine für DHL Paket (V01PAK)
-  und DHL Kleinpaket (V62KP)
-- **Mindestens ein Absender** im Adressbuch
+➡️ **[`DHL-Label-Extension-Setup-Anleitung.pdf`](./DHL-Label-Extension-Setup-Anleitung.pdf)**
 
-Optional:
+Darin enthalten:
+- Installation in Chrome/Edge (Entwicklermodus, Entpackte Erweiterung laden)
+- Erste Einrichtung mit eigenen DHL-Zugangsdaten
+- DHL Developer Portal: API-Key besorgen
+- Optional: Discord-Webhook konfigurieren
+- Bedienung im Alltag (Versand + Retoure)
+- Updates einspielen
+- Häufige Probleme + Lösungen
 
-- **Sandbox-Modus** — schaltet auf `api-sandbox.dhl.com` um (keine echten Labels)
+## 🔄 Updates
 
-## Bedienung
+Diese Repository wird regelmäßig auf den aktuellen Stand gebracht. Wenn eine neue Version verfügbar ist:
 
-1. Auf das Extension-Icon klicken (Popup öffnet sich)
-2. Sendungsreferenz eingeben (z.B. eBay-Bestellnr., 8–35 Zeichen)
-3. Absender aus Dropdown wählen
-4. eBay-Adresse in das gelbe Feld einfügen → **⚡ Erkennen**
-   (oder Felder manuell ausfüllen)
-5. Gewicht in kg eingeben
-6. Produkt wählen (Paket bis 31,5 kg / Kleinpaket bis 1 kg)
-7. **Sendung beauftragen** → PDF wird automatisch generiert und in den Verlauf
-   gespeichert
+1. Erneut die ZIP von hier herunterladen
+2. Inhalt in deinen bestehenden Extension-Ordner kopieren und alle Dateien überschreiben
+3. In `chrome://extensions` neben **DHL Label Creator (Team)** auf das **⟳-Symbol** klicken (Reload)
 
-## Verlauf
+Deine Settings (API-Keys, Absender, Webhook) bleiben dabei erhalten — sie liegen separat im Browser, nicht in den Programmdateien.
 
-Der Verlauf-Button (oben rechts im Popup) zeigt alle bisher erstellten Labels.
-Jeder Eintrag enthält Empfänger, Adresse, Produkt, Gewicht und Sendungsnummer
-und kann jederzeit als PDF erneut heruntergeladen oder gelöscht werden.
+## 🔒 Datenschutz
 
-## Dateien
+Alle deine Zugangsdaten und Webhook-URLs werden ausschließlich lokal in deinem Browser gespeichert (LocalStorage / `chrome.storage.local`). Sie verlassen niemals deinen Rechner und werden nicht an den Maintainer oder Dritte übertragen. Die einzigen Server, mit denen die Extension spricht, sind die offiziellen DHL-API-Server (`api-eu.dhl.com`) und — falls konfiguriert — deine eigenen Discord-Webhooks.
 
-| Datei                | Zweck                                           |
-|----------------------|-------------------------------------------------|
-| `manifest.json`      | Manifest V3                                     |
-| `popup.html/.js`     | Hauptformular (Versandauftrag erstellen)        |
-| `options.html/.js`   | Einstellungen (Credentials, Absender)           |
-| `background.js`      | Service-Worker — DHL API, History               |
-| `address_parser.js`  | JS-Port des Python-Adressparsers                |
-| `icons/`             | Extension-Icons (16/48/128 px)                  |
-| `generate_icons.py`  | Re-generiert die Icons (nur bei Bedarf)         |
+## 📁 Dateien
 
-## Speicherorte
+| Datei | Zweck |
+|---|---|
+| `manifest.json` | Chrome Manifest V3 |
+| `popup.html` / `popup.js` | Side-Panel-UI (Versand + Retoure) |
+| `options.html` / `options.js` | Settings (Credentials, Absender, Empfänger) |
+| `background.js` | Service-Worker — DHL-API, Discord, History |
+| `print.html` / `print.js` | Druck-Dialog |
+| `address_parser.js` | Adress-Erkennung aus Copy-Paste |
+| `lib/pdf-lib.min.js` | PDF-Manipulation |
+| `icons/` | Extension-Icons (16, 48, 128 px) |
 
-- **Einstellungen** & **Verlauf** liegen in `chrome.storage.local` der Extension.
-- PDFs werden Base64-codiert pro Sendungsnummer abgelegt.
-- Beim Deinstallieren der Extension werden alle Daten gelöscht.
+## ⚠️ Hinweis zur Versionierung
 
-## Sicherheitshinweis
+Diese **Team-Version** unterscheidet sich von der internen Maintainer-Version durch:
+- **Kein hardcoded Discord-Webhook** — Empfänger werden via Settings konfiguriert
+- **Kein Native Messaging / lokales Backend** — alles läuft direkt aus der Browser-Extension
+- **Keine Auto-Start-Logik** für lokale Flask-App
 
-Passwort und API-Key liegen unverschlüsselt in `chrome.storage.local`.
-Das ist für eine lokale Single-User-Installation OK — gib die Extension
-nicht weiter, ohne deine Credentials vorher in den Optionen zu entfernen.
+Die Extension funktioniert komplett standalone — kein Python, kein Server-Setup nötig.
